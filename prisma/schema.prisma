@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  password     String
+  loginType    LoginType
+  reservations Reservation[]
+  phone        String
+  exp          Int
+  lastLogin    DateTime
+  prefLanguage Language
+  createdAt    DateTime
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+}
+
+model Reservation {
+  id        Int               @id @default(autoincrement())
+  createdAt DateTime
+  updatedAt DateTime
+  user      User              @relation(fields: [userID], references: [id])
+  slots     Json
+  status    ReservationStatus
+  userID    Int
+  discount  String
+}
+
+enum LoginType {
+  GOOGLE
+  STEAM
+  TRADITIONAL
+  DISCORD
+}
+
+enum ReservationStatus {
+  AWAITING_CONFIRMATION
+  CONFIRMED
+  CANCELED
+}
+
+enum Language {
+  SERBIAN
+  RUSSIAN
+  ENGLISH
+}
+
+enum Rank {
+  BRONZE_1
+  BRONZE_2
+  BRONZE_3
+  SILVER_1
+  SILVER_2
+  SILVER_3
+  GOLD_1
+  GOLD_2
+  GOLD_3
+  PLAT_1
+  PLAT_2
+  PLAT_3
+  DIAMOND_1
+  DIAMOND_2
+  DIAMOND_3
+  LEGENDARY
+}
